@@ -20,10 +20,6 @@
 
 <body>
   <button id="start">Start</button>
-  <p>Iteration:</p>
-  <p id="iteration">0</p>
-  <p>Pi:</p>
-  <p id="pi">0</p>
   <canvas id="canvas"></canvas>
   <script>
     function createCanvas() {
@@ -39,6 +35,10 @@
       ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
       ctx.rect(center.x, center.y - radius, radius, radius);
       ctx.rect(center.x - radius, center.y - radius, radius * 2, radius * 2);
+      ctx.font = '21px serif';
+      ctx.fillText('r = 1', center.x + radius / 2 - 20, center.y + 25);
+      ctx.fillText('Area of this circle = Pi', center.x + radius + 30, center.y);
+      ctx.fillText('Area of this square = 4', center.x + radius + 30, center.y + 30);
       ctx.stroke();
       return ctx;
     }
@@ -54,13 +54,16 @@
       } else {
         ctx.fillStyle = 'red';
       }
-      ctx.fillRect(center.x + radius * x, center.y - radius * y, 3, 3);
+      ctx.fillRect(center.x + radius * x, center.y - radius * y, 2, 2);
+      ctx.fillStyle = 'black';
+      ctx.clearRect(center.x + radius + 30, center.y - radius - 50, center.x + radius + 500, center.y - radius + 100);
+      ctx.fillText(`Number of dots: ${numberOfPoints}`, center.x + radius + 30, center.y - radius + 20);
+      ctx.fillText(`Number of dots inside radius: ${numberOfPointsInsideRadius}`, center.x + radius + 30, center.y - radius + 50);
+      ctx.fillText(`Pi: ${4 * numberOfPointsInsideRadius / numberOfPoints}`, center.x + radius + 30, center.y - radius + 80);
     }
 
     function start() {
       if (startButton.textContent === 'Start') {
-        pi.textContent = '0';
-        iteration.textContent = '0';
         startButton.textContent = 'Stop';
         ctx = createCanvas();
         LOOP = true;
@@ -76,8 +79,6 @@
     function loop() {
       if (LOOP) {
         random();
-        pi.textContent = 4 * numberOfPointsInsideRadius / numberOfPoints;
-        iteration.textContent = numberOfPoints;
         setTimeout(loop, 1);
       }
     }
@@ -89,8 +90,6 @@
     let numberOfPoints = 0;
     let numberOfPointsInsideRadius = 0;
     let LOOP = false;
-    const pi = document.getElementById('pi');
-    const iteration = document.getElementById('iteration');
     const startButton = document.getElementById('start');
     startButton.addEventListener('click', start);
   </script>
