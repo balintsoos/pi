@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pi</title>
+  <style>
+    body {
+      text-align: center;
+    }
+
+    #start {
+      margin-top: 20px;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="start">Start</button>
+  <p>Iteration:</p>
+  <p id="iteration">0</p>
+  <p>Pi:</p>
+  <p id="pi">0</p>
+  <canvas id="canvas"></canvas>
+  <script>
+    function createCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 200;
+      const ctx = canvas.getContext('2d');
+      center = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+      };
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
+      ctx.rect(center.x, center.y - radius, radius, radius);
+      ctx.rect(center.x - radius, center.y - radius, radius * 2, radius * 2);
+      ctx.stroke();
+      return ctx;
+    }
+
+    function random() {
+      const x = Math.random();
+      const y = Math.random();
+      numberOfPoints += 1;
+      const distance = x ** 2 + y ** 2;
+      if (distance < 1) {
+        ctx.fillStyle = 'green';
+        numberOfPointsInsideRadius += 1;
+      } else {
+        ctx.fillStyle = 'red';
+      }
+      ctx.fillRect(center.x + radius * x, center.y - radius * y, 3, 3);
+    }
+
+    function start() {
+      if (startButton.textContent === 'Start') {
+        pi.textContent = '0';
+        iteration.textContent = '0';
+        startButton.textContent = 'Stop';
+        ctx = createCanvas();
+        LOOP = true;
+        setTimeout(loop, 1);
+      } else {
+        startButton.textContent = 'Start';
+        numberOfPoints = 0;
+        numberOfPointsInsideRadius = 0;
+        LOOP = false;
+      }
+    }
+
+    function loop() {
+      if (LOOP) {
+        random();
+        pi.textContent = 4 * numberOfPointsInsideRadius / numberOfPoints;
+        iteration.textContent = numberOfPoints;
+        setTimeout(loop, 1);
+      }
+    }
+
+    let center;
+    const radius = 300;
+    const canvas = document.getElementById('canvas');
+    let ctx = createCanvas();
+    let numberOfPoints = 0;
+    let numberOfPointsInsideRadius = 0;
+    let LOOP = false;
+    const pi = document.getElementById('pi');
+    const iteration = document.getElementById('iteration');
+    const startButton = document.getElementById('start');
+    startButton.addEventListener('click', start);
+  </script>
+</body>
+
+</html>
