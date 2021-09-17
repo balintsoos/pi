@@ -24,12 +24,14 @@
   <script>
     function createCanvas() {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight - 200;
-      const ctx = canvas.getContext('2d');
+      canvas.height = window.innerHeight - 100;
+      const ctx = canvas.getContext('2d', { alpha: false });
       center = {
         x: canvas.width / 2,
         y: canvas.height / 2,
       };
+      radius = Math.min(center.x, center.y) * 0.8;
+      console.log(radius);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
@@ -55,8 +57,8 @@
         ctx.fillStyle = 'red';
       }
       ctx.fillRect(center.x + radius * x, center.y - radius * y, 2, 2);
+      ctx.clearRect(center.x + radius + 30, center.y - radius, 500, 200);
       ctx.fillStyle = 'black';
-      ctx.clearRect(center.x + radius + 30, center.y - radius - 50, center.x + radius + 500, center.y - radius + 100);
       ctx.fillText(`Number of dots: ${numberOfPoints}`, center.x + radius + 30, center.y - radius + 20);
       ctx.fillText(`Number of dots inside radius: ${numberOfPointsInsideRadius}`, center.x + radius + 30, center.y - radius + 50);
       ctx.fillText(`Pi: ${4 * numberOfPointsInsideRadius / numberOfPoints}`, center.x + radius + 30, center.y - radius + 80);
@@ -84,7 +86,7 @@
     }
 
     let center;
-    const radius = 300;
+    let radius;
     const canvas = document.getElementById('canvas');
     let ctx = createCanvas();
     let numberOfPoints = 0;
